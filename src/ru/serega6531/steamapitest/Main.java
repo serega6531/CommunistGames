@@ -48,7 +48,35 @@ public class Main {
                 both.add(game);
         }
 
-        System.out.println(both.toString());
+        if(both.size() > 0) {
+            both.sort((o1, o2) -> {
+                String f = String.valueOf(o1.getId());
+                String s = String.valueOf(o2.getId());
+
+                if(f.length() != s.length()){
+                    return f.length() - s.length();
+                }
+
+                return f.compareTo(s);
+            });
+
+            int max = both.stream()
+                    .map(SteamGame::getName)
+                    .mapToInt(String::length)
+                    .max().getAsInt();
+
+            for (SteamGame game : both) {
+                System.out.print(game.getName());
+
+                for(int i = game.getName().length(); i < max; i++)
+                    System.out.print(" ");
+
+                System.out.print(" | ");
+                System.out.println(String.format(gameUrl, game.getId()));
+            }
+        } else {
+            System.out.println("У игроков нет ни одной общей игры");
+        }
     }
 
     private static String customURLToId(String name){
